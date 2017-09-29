@@ -1,0 +1,113 @@
+<!--  
+一、mvvm
+	-m：model，数据层，js中的对象
+	-v：view
+	-vm：view-model，用于将view和model连接起来
+二、vue
+	1、简介
+	angular2以后，基本属于mvvm架构，vue从一开始就是mvvm架构；vue也是组件化的一个js框架，其语法和angular类似，其主要特点有：
+	-数据双向绑定
+	-组件化
+	-管道
+	-路由
+	2、vue实例
+	每一个vue应用都是通过vue函数创建一个新的vue实例，传入相关data、method等参数，
+	语法：
+	new Vue({
+		el:"绑定元素选择器",一般是id的值，注意，其取值，不能为html、body等外层元素
+	});
+	注意，一个应用，只会存在一个实例，它表示应用的入口
+	实例中包含data、method等对象
+	3、实例生命周期
+	每一个实例在重建到销毁的过程中，会经历一系列的方法，这些方法称之为生命钩子，其中包括：beforeCreate(创建之前)、created（已经创建）、beforeMount（挂载之前）、mouted（已经挂载）、beforeUpdate（更新之前）、updated（已更新）
+	data对象，在实例创建完成后才会进行初始化，在此之前，所有的数据都是undefined
+	
+	4、表达式
+	与angular类似，使用{{}}表示表达式
+
+	5、计算属性
+	当我们在html中，通过表达式的方式，进行复杂的逻辑处理时，会导致html难以维护，所以出现计算属性（computed）
+
+	6、内置指令
+	-v-bind （单向绑定）
+	通过v-bind绑定class
+	方式一：v-bind:class="类名:表达式"，当表达式的值为true时，使用制定的类名
+	方式二：数组语法，把一个数组传给v-bind:class="[c1,c2]",如果不加单引号，则表示使用实例中的参数
+
+	方式三：v-bind:class="myClass?isa:isB"
+	v-bind:可直接简写为:
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>document</title>
+	<!-- 首先引入其js文件 -->
+	<script src="vue.js"></script>
+	<style>
+		.c2{
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model="a">
+		<div>{{a}}</div>
+		<div>{{fun}}</div>
+
+		<!-- 绑定class 当flag为true时，使用c2-->
+		<div class="c1" v-bind:class="{c2:flag}">aaa</div>
+		<div v-bind:class="{c2:1<2}">bbb</div>
+		<!-- 数组语法 -->
+		<div v-bind:class="[c1,c2,c3]">11</div>
+		<!-- 三目 -->
+		<div v-bind:class='myClass?isA:isB'></div>
+		<div :class='myClass?isA:isB'></div>
+		<!-- 绑定url -->
+		<img v-bind:src="url" alt="">
+		<img :src="url" alt="">
+	</div>
+	<script>
+		new Vue({
+			el:"#app",
+			data:{
+				a:2,
+				flag:false,
+				c1:"class1",
+				c2:"class2",
+				c3:"class3",
+				myClass:true,
+				isA:"classA",
+				isB:'classB',
+				url:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1507279673&di=7d4b5e9168bcb5586d1abbd684295d02&imgtype=jpg&er=1&src=http%3A%2F%2Fstatic10.photo.sina.com.cn%2Fmiddle%2F5a3ab1b1x9961016a8699%26amp%3B690"
+			},
+			beforeCreate:function(){
+				console.log("正在准备创建"+this.a)
+			},
+			created:function(){
+				console.log('已经被创建-'+this.a)
+			},
+			beforeMount:function(){
+				console.log('正在准备挂载')
+			},
+			mounted:function(){
+				console.log('挂载完毕')
+			},
+			beforeUpdate:function(){
+				console.log("更新之前"+this.a)
+			},
+			updated:function(){
+				console.log('完成更新'+this.a)
+			},
+			// 计算属性
+			computed:{
+				// 拥有一个用来处理逻辑的函数
+				fun:function(){
+					return this.a+Math.pow(this.a,2);
+				}
+			}
+		})
+	</script>
+</body>
+</html>
