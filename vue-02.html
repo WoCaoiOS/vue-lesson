@@ -1,0 +1,63 @@
+<!--  
+指令
+	1、v-bind
+	-内联样式绑定
+	通过v-bind:style="{样式规则}",此处样式属性名包含横线的，需要将横线去掉，横线后的第一个字母大写；
+	另外，绑定的样式，可以取值为一个对象
+
+	2、v-if
+	其作用与ng-if相同，当其取值为true时，元素显示
+	3、v-show
+	略
+	4、v-for
+	类似angular中的ngFor，用于循环创建
+	用法：
+	v-for="obj in arrs"
+	v-for="(obj,index) in arrs",index表示下标
+	同时v-for可以遍历对象的属性(不常用)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<div :style="{color:colorStr,fontSize:fontSize}">文本内容</div>
+		<div :style="obj">123123</div>
+		<div v-if="isShow">aaa</div>
+		<div v-if="1>2">ioiiooi</div>
+		<div v-show="1===2">opop</div>
+		<ul>
+			<li v-for="a in arr">{{a}}</li>
+		</ul>
+		<ul>
+			<li v-for="a in arr1">{{a.name}}</li>
+		</ul>
+		<ul>
+			<li v-for="(a,index) in arr1">{{index}}-{{a.name}}</li>
+		</ul>
+		<ul>
+			<li v-for="k in obj">{{k}}</li>
+		</ul>
+	</div>
+	<script>
+		new Vue({
+			el:"#app",
+			data:{
+				colorStr:"red",
+				fontSize:"20px",
+				obj:{
+					fontWeight:"bold",
+					textAlign:"center"
+				},
+				isShow:true,
+				arr:[1,2,3,4],
+				arr1:[{name:"张三",age:"20"},{name:"李四",age:"18"}]
+			}
+		})
+	</script>
+</body>
+</html>
