@@ -1,0 +1,103 @@
+<!--  
+一、数据双向绑定
+	v-model用于属相绑定，绑定的必须是已经存在的变量
+
+	修饰符，v-model拥有几个修饰符，用于简化操作
+	-lazy、number、trim
+	lazy：在文本框结束编辑后，再触发
+	number：将内容转换成number类型
+	trim：去除输入内容两端的空格
+二、组件
+	1、概念
+	组件，可以看成是一个自己定义的，具有独立功能的UI控件
+	2、vue.js中的组件
+	在vue中，性需要先注册组件，才能进行使用
+	1）注册
+	注册分为全局注册，和局部注册
+	-全局注册
+	使用Vue.component('组件名',{});
+	注意，注册组件，必须放在初始化实例之前
+
+	-局部注册
+	局部注册组件，其语法与对象直接量的语法一致，然后将其放入实例的comments对象中
+	3、组件有自己的作用域 ，其数据也存放在data中，但是，组件在的data必须是函数
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model="uname">
+		<p>{{uname}}</p>
+		<!-- 复选框 -->
+		<input type="checkbox" v-model="checked">
+		<!-- 多个复选框 -->
+		<input type="checkbox" value="sleep" v-model="hobby">睡
+		<input type="checkbox" value="eat" v-model="hobby">吃
+		<input type="checkbox" value="drink" v-model="hobby">喝
+		<p>{{hobby}}</p>
+
+		<!-- 单选框 -->
+		<input type="radio" value="f" v-model="sex" name=“gender>男
+		<input type="radio" value="m" v-model="sex" name=“gender>女
+		<p>{{sex}}</p>
+		<!-- 列表:如果列表项无value属性，则绑定的是option文本的值，否则是value的值 -->
+		<select v-model="sel">
+			<option value="a">1</option>
+			<option value="b">2</option>
+			<option value="c">3</option>
+			<option value="d">4</option>
+		</select>
+		<p>{{sel}}</p>
+		<input type="text" v-model.lazy="msg">
+		<p>{{msg}}</p>
+		<my-component></my-component>
+		<my-component1></my-component1>
+	</div>
+	<script>
+		// 全局注册
+		Vue.component('my-component',{
+			template:'<div @click="fun">{{myInfo}}</div>',
+			// 组件的数据
+			data:function(){
+				return {
+					myInfo:'abc'
+				}
+			},
+			methods:{
+				fun:function(){
+					// 此处的this，表示组件对象
+					console.log("------"+this.myInfo)
+				}
+			}
+		})
+		// 局部注册
+		var temp = {
+			template:'<p>这是局部组件</p>'
+		}
+		new Vue({
+			el:"#app",
+			data:{
+				uname:'',
+				checked:false,
+				hobby:['sleep'],
+				sex:"f",
+				sel:'a',
+				msg:''
+			},
+			methods:{
+				fun:function(){
+					console.log('-=-=-=')
+				}
+			},
+			components:{
+				'my-component1':temp
+			}
+		})
+	</script>
+</body>
+</html>
