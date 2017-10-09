@@ -1,0 +1,66 @@
+<!--  
+一、自定义指令
+	指令声明钩子包含的参数
+	el：表示指令所绑定的元素（DOM对象），通过该参数，可以操作指定的dom元素对象
+	binding：该参数是一个对象，主要包含的属性有
+		-name：指令名，注意，不包含v-前缀
+		-value：指令绑定值，其取值可以是表达式，也可以是变量
+		比如：v-my-directive="1+1"，value=2，v-my-directive="'abc'"，value=abc;
+		注意，如果指令的值是字符串，则必须用引号引起来，如果是一个变量，则直接写变量名
+		-oldValue：指令绑定的前一个值，也就是触发了update之前的值
+		-expression：绑定的值的字符串形式，完全等同于=号后字符串的内容
+		-arg：传给指令的参数，比如：v-my-directive:red，那么arg就等于red
+		-modifiers：一个包含修饰符的对象，比如：v-my-directive.red，此时modifiers就是{red:true}
+	vnode：编译器生成的虚拟节点
+	oldVnode：上一个虚拟节点
+
+	当我们需要传递多个参数时，可以将指令的值设置为一个js对象直接量
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<div v-my-directive.red="'abc'"></div>
+		<div v-my-directive:red="msg"></div>
+		<div v-app-directive:black="'我是指令的值'"></div>
+		<!-- 设置对象直接量 -->
+		<div v-app-directive1="{color:'white',bgColor:'blue'}"></div>
+	</div>
+	<script>
+		Vue.directive('my-directive',{
+			bind:function(el,binding,vnode){
+				console.log(el,binding);
+				el.innerHTML = "<a href='#'>超链接</a>";
+				console.log(binding.arg);
+				console.log(vnode)
+			}
+		});
+		// 定义指令，其背景色改为用户传递过来的颜色，字体颜色为蓝色
+		Vue.directive('app-directive',{
+			bind:function(el,binding){
+				console.log(binding.arg)
+				el.style.backgroundColor = binding.arg;
+				el.style.color = "white";
+				el.innerHTML = "指令名："+binding.name+"指令值："+binding.value;
+			}
+		})
+		// 对象直接量
+		Vue.directive('app-directive1',{
+			bind:function(el,binding){
+				console.log(binding.value.color,binding.value.bgColor)
+			}
+		})
+		new Vue({
+			el:"#app",
+			data:{
+				msg:"hello"
+			}
+		})
+	</script>
+</body>
+</html>
