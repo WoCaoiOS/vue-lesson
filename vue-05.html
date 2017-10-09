@@ -1,0 +1,111 @@
+<!--  
+一、过滤器（管道）：
+	在2.0之后，内置过滤器已被移除，所以需要自定义过滤器
+	语法：在vue实例的filters对象中定义过滤器
+	new Vue({
+		filters:{
+			过滤器名:function(参数){
+				//过滤器的具体代码
+				return 过滤结果
+			}
+		}
+	})
+	使用过滤器：无参数的，使用语法与angular一致
+				有参数的{{待过滤 | 过滤器(参数)}}
+二、自定义指令
+	程序员自己定义的，扩展原有标记的一个UI控件
+	语法：
+	Vue.directive(指令名,定义对象)
+	定义对象，主要包含一些指令的钩子函数
+	主要的钩子函数有：
+	-bind：只会调用一次，指令第一次绑定到元素时触发
+	-inserted：被绑定元素插入到父节点时触发
+	-update：被绑定元素发生改变时触发，存在两种情况，一是值发生改变，二是绑定的元素发生改变
+	-unbind：断开绑定时触发，只会触发一次
+
+	注意：自定义指令需要写在创建实例之前
+
+	当我们只需要使用update钩子函数时，可以只传一个函数来代替定义对象
+	语法为：Vue.directive(指令名,function(){
+		
+	})
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		{{"你好！" | myFilter}}
+
+		<div>{{"" | myFilter2}}</div>
+		<!-- 使用带参数的过滤器 -->
+		<div>{{ "你好" | myFilter3("!","☺") }}</div>
+		<div>
+			<!-- 使用自定义指令 -->
+			<input type="text" v-model="msg">
+			<input type="button" value="按钮" @click="fun">
+			<div v-if="isShow" v-my-directive>{{msg}}</div>
+			<div v-if="!isShow" v-my-directive style="background: red;">123123</div>
+		</div>
+		<input type="text" v-my-update v-model="up">
+	</div>
+	<script>
+		// 定义指令
+		Vue.directive("my-directive",{
+			bind:function(){
+				console.log('指令绑定到元素')
+			},
+			inserted:function(){
+				console.log('指令已显示')
+			},
+			update:function(el){
+				console.log("指令更新");
+				console.log(el)
+			},
+			unbind:function(){
+				console.log('指令断开')
+			}
+		});
+		Vue.directive('my-update',function(){
+			console.log('指令发生了改变，已更新');
+		})
+	
+		new Vue({
+			el:"#app",
+			data:{
+				msg:"11",
+				isShow:true,
+				up:''
+			},
+			methods:{
+				fun:function(){
+					this.isShow = !this.isShow;
+				}
+			},
+			filters:{
+				// value表示需要过滤的内容
+				myFilter:function(value){
+					return value+"☺";
+				},
+				myFilter2:function(value){
+					if (!value) {
+						return "无内容"
+					}
+					return value+"vue"
+				},
+				// 带参数的过滤器
+				myFilter3:function(value,a,b){
+					if (!value) {
+						return '';
+					}
+					return value+a+b;
+				}
+			}
+		})
+	</script>
+</body>
+</html>
