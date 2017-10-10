@@ -1,0 +1,70 @@
+<!--  
+vuex（状态管理）
+	通俗的讲，vuex是前端为了方便数据的操作而建立的一个存储容器，多用来处理多个组件之间共享的数据
+
+	1、使用
+	-可以通过直接导入js的方式
+	-使用npm安装
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="vue.js"></script>
+	<script src="vuex.js"></script>
+</head>
+<body>
+	<div id="app">
+		<button @click="addCount">+</button>
+		{{count}}
+		<button @click="subCount">-</button>
+	</div>
+	<script>
+		// new Vue({
+		// 	el:"#app",
+		// 	data:{
+		// 		count:0
+		// 	},
+		// 	methods:{
+		// 		addCount:function(){
+		// 			this.count++
+		// 		},
+		// 		subCount:function(){
+		// 			this.count--
+		// 		}
+		// 	}
+		// })
+		
+		// 使用vuex
+		// 首先创建一个store
+		const store = new Vuex.Store({
+			state:{
+				count:0
+			},
+			mutations:{
+				addCount:state=>state.count++,
+				subCount:state=>state.count--
+			}
+		})
+
+		// vue实例
+		const app = new Vue({
+			el:"#app",
+			computed:{
+				count(){
+					return store.state.count
+				}
+			},
+			methods:{
+				addCount(){
+					store.commit('addCount')
+				},
+				subCount(){
+					store.commit('subCount')
+				}
+			}
+		})
+	</script>
+</body>
+</html>
