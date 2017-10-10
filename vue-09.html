@@ -1,0 +1,75 @@
+<!--  
+axios
+	axios是一个基于promise用于处理http请求的一门技术；在vue2.0之后，不再维护vue-resource
+
+	1、特点
+	-在浏览器创建xmlhttprequest
+	-在node.js发出http请求
+	-支持异步处理
+	-可以取消请求
+	-会自动转换json数据
+
+	2、使用
+	-引入js文件
+	-使用axios对象，发送请求
+
+element-ui
+	http://element.eleme.io/#/zh-CN/component/installation
+图片懒加载
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="axios.min.js"></script>
+</head>
+<body>
+	<script>
+		// 发送get请求，方式一
+		axios.get("http://route.showapi.com/92-92?showapi_appid=44993&showapi_sign=82829efed7b04e2a8df1dd79a1814c55&id=6")
+		.then(function(response) {
+			// 处理获取到的数据
+			console.log(response.data)
+			console.log(response.data.showapi_res_body)
+			console.log(response.data.showapi_res_body.bookList)
+		})
+		// 发送get请求，方式二
+		axios.get("http://route.showapi.com/92-92",{
+			// 参数列表，json格式
+			params:{
+				showapi_appid:44993,
+				showapi_sign:'82829efed7b04e2a8df1dd79a1814c55',
+				id:6
+			}
+		})
+		.then(function(response){
+			console.log(response)
+		})
+
+		// 发送post请求
+		axios.post('http://route.showapi.com/92-92',{
+			showapi_appid:44993,
+			showapi_sign:'82829efed7b04e2a8df1dd79a1814c55',
+			id:6
+		})
+		.then(function(response){
+			console.log("post:",response)
+		})
+
+		// axios标准方法
+		axios({
+			method:"get",
+			url:"http://route.showapi.com/92-92",
+			data:{
+				showapi_appid:44993,
+				showapi_sign:'82829efed7b04e2a8df1dd79a1814c55',
+				id:6
+			}
+		})
+		.then(function(response){
+			console.log('原始方法-',response)
+		})
+	</script>
+</body>
+</html>
